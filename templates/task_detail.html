@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ task.title }}{% endblock %}
+{% block content %}
+<div class="card p-4 shadow-sm">
+    <div class="d-flex justify-content-between align-items-start mb-2">
+        <div>
+            <h2 class="mb-1">{{ task.title }}</h2>
+            <p class="text-muted mb-2">{{ task.get_status_display }} • {{ task.get_priority_display }}</p>
+            {% if task.due_date %}<span class="badge badge-info">до {{ task.due_date }}</span>{% endif %}
+        </div>
+        <div>
+            <a class="btn btn-outline-primary btn-sm" href="{% url 'task_update' task.id %}">Редактировать</a>
+            <form method="post" action="{% url 'task_delete' task.id %}" class="d-inline" onsubmit="return confirm('Удалить задачу?');">
+                {% csrf_token %}
+                <button class="btn btn-outline-danger btn-sm" type="submit">Удалить</button>
+            </form>
+        </div>
+    </div>
+    <p>{{ task.description|default:"Нет описания" }}</p>
+
+    <h5>Файлы</h5>
+    {% if task_files %}
+        <ul class="list-group mb-3">
+            {% for f in task_files %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="{{ f.file.url }}">{{ f.file.name }}</a>
+                <div>
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'view_file' f.id %}">Скачать</a>
+                    <a class="btn btn-sm btn-outline-danger" href="{% url 'delete_file' f.id %}">Удалить</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">Нет файлов.</p>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="upload-form">
+        {% csrf_token %}
+        {{ file_form.as_p }}
+        <button class="btn btn-outline-primary" type="submit">Загрузить файл</button>
+    </form>
+</div>
+{% endblock %}

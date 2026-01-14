@@ -1,32 +1,9 @@
-# Virtual Environment
-venv/
-
-# Byte-compiled / optimized / DLL files
+.venv/
 __pycache__/
+db.sqlite3
 *.pyc
 *.pyo
-*.pyd
-
-# Database
-db.sqlite3
-
-# Static files
-staticfiles/
-
-# Media
+*.log
 media/
-
-# Local development settings
-local_settings.py
-
-# IDE files
-.idea/
-
-# Compiled Python files
-*.pyc
-
-# Compiled C extension
-*.so
-
-# Miscellaneous
+staticfiles/
 .DS_Store

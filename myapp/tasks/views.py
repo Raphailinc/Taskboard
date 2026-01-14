@@ -2,7 +2,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import TaskForm, TaskFileForm
-from django.http import HttpResponse
+from django.http import FileResponse, HttpResponse, HttpResponseBadRequest
 from .models import Task, TaskFile
 from django.db.models import Q
 import logging
@@ -14,12 +14,15 @@ logger.setLevel(logging.DEBUG)
 @login_required
 def task_list(request):
     query = request.GET.get('q', '')
+    status = request.GET.get('status')
     tasks = Task.objects.filter(assigned_to=request.user)
 
     if query:
         tasks = tasks.filter(Q(title__icontains=query) | Q(description__icontains=query))
+    if status:
+        tasks = tasks.filter(status=status)
 
-    tasks = tasks.order_by('id')
+    tasks = tasks.order_by('due_date', '-priority', '-created_at')
 
     page = request.GET.get('page', 1)
     paginator = Paginator(tasks, 10)
@@ -63,8 +66,10 @@ def task_update(request, task_id):
 @login_required
 def task_delete(request, task_id):
     task = get_object_or_404(Task, id=task_id, assigned_to=request.user)
-    task.delete()
-    return redirect('task_list')
+    if request.method == 'POST':
+        task.delete()
+        return redirect('task_list')
+    return HttpResponseBadRequest("Invalid method")
 
 
 @login_required
@@ -88,13 +93,8 @@ def task_detail(request, task_id):
 @login_required
 def view_file(request, file_id):
     task_file = get_object_or_404(TaskFile, id=file_id)
-    
-    try:
-        with open(task_file.file.path, 'rb') as file_content:
-            content = file_content.read()
-        return HttpResponse(content, content_type='application/octet-stream')
-    except Exception as e:
-        return HttpResponse(f"Error: {e}", status=500)
+
+    return FileResponse(open(task_file.file.path, 'rb'), as_attachment=True)
 
 
 @login_required

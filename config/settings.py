@@ -1,26 +1,13 @@
-from django.db.models import BigAutoField
 from pathlib import Path
-import random
-import string
 import os
 
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-change-me")
+DEBUG = os.environ.get("DJANGO_DEBUG", "true").lower() == "true"
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-def generate_secret_key():
-    characters = string.ascii_letters + string.digits + string.punctuation
-    return ''.join(random.choice(characters) for i in range(50))
-
-
-SECRET_KEY = generate_secret_key()
-DEBUG = True
-
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",") if not DEBUG else ["*"]
 
 
 INSTALLED_APPS = [
@@ -73,13 +60,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tasks',
-        'USER': 'keamil',
-        'PASSWORD': 'KappaPride',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
+        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('DB_NAME', BASE_DIR / 'db.sqlite3'),
+        'USER': os.environ.get('DB_USER', ''),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', ''),
+        'PORT': os.environ.get('DB_PORT', ''),
+    },
 }
 
 
@@ -121,7 +108,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 

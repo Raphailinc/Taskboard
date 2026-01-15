@@ -1,9 +1,12 @@
 .venv/
 __pycache__/
 db.sqlite3
+.env
 *.pyc
 *.pyo
 *.log
 media/
 staticfiles/
 .DS_Store
+.pytest_cache/
+.ruff_cache/

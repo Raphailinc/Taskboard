@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="url(#grad)"/>
+  <text x="40" y="60" fill="#38bdf8" font-size="34" font-family="Inter, Arial, sans-serif" font-weight="700">Taskboard — колонками</text>
+  <text x="40" y="90" fill="#94a3b8" font-size="16" font-family="Inter, Arial, sans-serif">SQLite по умолчанию • загрузка файлов • поиск/фильтр</text>
+  <rect x="40" y="130" width="260" height="360" rx="16" fill="#111827" stroke="#38bdf8" stroke-width="2"/>
+  <text x="60" y="170" fill="#e5e7eb" font-size="16" font-family="Inter, Arial, sans-serif">To Do</text>
+  <rect x="60" y="190" width="220" height="70" rx="12" fill="#1f2937" stroke="#334155"/>
+  <text x="74" y="214" fill="#e5e7eb" font-size="14" font-family="Inter, Arial, sans-serif">Wireframes</text>
+  <text x="74" y="236" fill="#9ca3af" font-size="12" font-family="Inter, Arial, sans-serif">due: 2024-11-10</text>
+  <rect x="60" y="270" width="220" height="70" rx="12" fill="#1f2937" stroke="#334155"/>
+  <text x="74" y="294" fill="#e5e7eb" font-size="14" font-family="Inter, Arial, sans-serif">Landing copy</text>
+  <text x="74" y="316" fill="#9ca3af" font-size="12" font-family="Inter, Arial, sans-serif">High priority</text>
+  <rect x="60" y="350" width="220" height="70" rx="12" fill="#1f2937" stroke="#334155"/>
+  <text x="74" y="374" fill="#e5e7eb" font-size="14" font-family="Inter, Arial, sans-serif">Unit tests</text>
+  <text x="74" y="396" fill="#9ca3af" font-size="12" font-family="Inter, Arial, sans-serif">Medium</text>
+  <rect x="320" y="130" width="260" height="360" rx="16" fill="#0b1220" stroke="#38bdf8" stroke-width="2"/>
+  <text x="340" y="170" fill="#e5e7eb" font-size="16" font-family="Inter, Arial, sans-serif">In Progress</text>
+  <rect x="340" y="190" width="220" height="90" rx="12" fill="#1f2937" stroke="#334155"/>
+  <text x="354" y="214" fill="#e5e7eb" font-size="14" font-family="Inter, Arial, sans-serif">API polish</text>
+  <text x="354" y="236" fill="#9ca3af" font-size="12" font-family="Inter, Arial, sans-serif">attachment: spec.pdf</text>
+  <rect x="600" y="130" width="260" height="360" rx="16" fill="#0b1220" stroke="#22c55e" stroke-width="2"/>
+  <text x="620" y="170" fill="#e5e7eb" font-size="16" font-family="Inter, Arial, sans-serif">Done</text>
+  <rect x="620" y="190" width="220" height="70" rx="12" fill="#1f2937" stroke="#334155"/>
+  <text x="634" y="214" fill="#e5e7eb" font-size="14" font-family="Inter, Arial, sans-serif">Onboarding</text>
+  <text x="634" y="236" fill="#9ca3af" font-size="12" font-family="Inter, Arial, sans-serif">with file upload</text>
+  <text x="40" y="520" fill="#94a3b8" font-size="12" font-family="Inter, Arial, sans-serif">Django • Bootstrap • file uploads • tests: python manage.py test</text>
+</svg>

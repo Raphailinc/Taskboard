@@ -2,14 +2,24 @@
 
 Упрощённый Django-трекер задач с загрузкой файлов, фильтрами и поиском. Настроен на SQLite по умолчанию, но можно указать свои параметры БД через переменные окружения.
 
-## Быстрый старт
+## Скриншот
+![Taskboard columns](docs/taskboard.svg)
+
+## Quickstart (Docker)
+```bash
+cp .env.example .env
+docker compose up --build
+# UI: http://localhost:8000
+```
+
+## Локальный запуск
 ```bash
 python -m venv .venv
 . .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 python manage.py migrate
 python manage.py createsuperuser  # по желанию
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
 ```
 Откройте http://127.0.0.1:8000 — создайте аккаунт, добавьте задачу.
 
@@ -23,6 +33,13 @@ python manage.py runserver
 - Поиск и фильтр по статусу, пагинация.
 - Загрузка и скачивание файлов к задаче.
 - Простые шаблоны на Bootstrap 4.
+
+## Архитектура
+- `config/` — настройки Django и маршрутизация.
+- `myapp/tasks` — модели, формы, вьюхи, загрузка файлов.
+- `templates/` — базовые шаблоны + auth.
+- `static/` — стили/JS, плюс media-uploads в `media/`.
+- Docker Compose поднимает Postgres + веб-приложение, миграции выполняются при старте.
 
 ## Команды управления
 ```bash
@@ -42,5 +59,11 @@ python manage.py test
 - `myapp/tasks` — модели/формы/вьюхи задач.
 - `templates/` — base, auth, списки/карточки задач.
 - `static/` — базовые стили/скрипты.
+- `docker-compose.yml` — приложение + Postgres, volume для media.
+
+## Quality
+- Линт/формат: `ruff check .`, `black --check .`
+- Тесты: `python manage.py test`
+- CI: (локально) `make` отсутствует, но docker compose + тесты запускаются одной командой.
 
 MIT © Raphailinc

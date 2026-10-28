@@ -32,7 +32,8 @@ class AttachmentAccessTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(b"".join(response.streaming_content), b"private attachment")
         self.assertIn("attachment;", response["Content-Disposition"])
-        response.close()
+        # Exhausting the test client's stream already closes the response safely.
+        self.assertTrue(response.closed)
 
     def test_other_account_cannot_download_or_delete_attachment(self):
         self.client.force_login(self.other)

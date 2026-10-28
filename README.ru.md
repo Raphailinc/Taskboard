@@ -1,73 +1,35 @@
 # Taskboard
 
-Упрощённый Django-трекер задач с загрузкой файлов, фильтрами и поиском. Настроен на SQLite по умолчанию, но можно указать свои параметры БД через переменные окружения.
+[![CI](https://github.com/Raphailinc/Taskboard/actions/workflows/ci.yml/badge.svg)](https://github.com/Raphailinc/Taskboard/actions/workflows/ci.yml)
 
-## Иллюстрация интерфейса
-![Taskboard columns](docs/taskboard.svg)
+[English](README.md) · [Русский](README.ru.md)
 
-## Quickstart (Docker)
-```bash
-cp .env.example .env
-docker compose up --build
-# UI: http://localhost:8000
-```
-
-## Локальный запуск
-```bash
-python -m venv .venv
-. .venv/bin/activate
-pip install -r requirements-dev.txt
-python manage.py migrate
-python manage.py createsuperuser  # по желанию
-python manage.py runserver 0.0.0.0:8000
-```
-Откройте http://127.0.0.1:8000 — создайте аккаунт, добавьте задачу.
-
-## Настройки окружения
-- `DJANGO_SECRET_KEY` — секретный ключ (по умолчанию dev-secret).
-- `DJANGO_DEBUG` — `true/false` (default: true).
-- `DB_ENGINE/DB_NAME/DB_USER/DB_PASSWORD/DB_HOST/DB_PORT` — параметры БД (если не заданы, используется SQLite файл `db.sqlite3`).
+Django-проект управления задачами через серверные HTML-формы и представления.
 
 ## Возможности
-- Задачи с полями: статус (To Do / In Progress / Done), приоритет (Low/Medium/High), дедлайн, описание.
-- Поиск и фильтр по статусу, пагинация.
-- Загрузка и скачивание файлов к задаче.
-- Простые шаблоны на Bootstrap 4.
 
-## Архитектура
-- `config/` — настройки Django и маршрутизация.
-- `myapp/tasks` — модели, формы, вьюхи, загрузка файлов.
-- `templates/` — базовые шаблоны + auth.
-- `static/` — стили/JS, плюс media-uploads в `media/`.
-- Docker Compose поднимает Postgres + веб-приложение, миграции выполняются при старте.
+- Задачи со статусом, приоритетом, сроком и описанием.
+- Поиск, фильтры и пагинация.
+- Вложения с проверкой владельца при скачивании и удалении.
+- Удаление вложений только POST-запросом с CSRF-защитой.
+- SQLite локально и PostgreSQL в Docker Compose.
 
-## Команды управления
+## Локальный запуск
+
 ```bash
-python manage.py runserver      # старт dev-сервера
-python manage.py createsuperuser
-python manage.py collectstatic  # для prod
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
+python manage.py migrate
+python manage.py runserver
 ```
 
-## Тесты
+## Проверки
+
 ```bash
 python manage.py test
 ```
-(минимальные smoke-тесты, база — SQLite in-memory).
 
-## Структура
-- `config/settings.py` — конфиг, env-friendly, SQLite по умолчанию.
-- `myapp/tasks` — модели/формы/вьюхи задач.
-- `templates/` — base, auth, списки/карточки задач.
-- `static/` — базовые стили/скрипты.
-- `docker-compose.yml` — приложение + Postgres, volume для media.
+## Условия запуска и границы проекта
 
-## Quality
-- Линт/формат: `ruff check .`, `black --check .`
-- Тесты: `python manage.py test`
-- CI: (локально) `make` отсутствует, но docker compose + тесты запускаются одной командой.
-
-MIT © Raphailinc
-
-## Права доступа к вложениям
-
-Файл скачивает и удаляет только владелец задачи. Удаление выполняется POST-запросом с CSRF-защитой. Прямой маршрут `/media/` отключён и в разработке; при развёртывании `MEDIA_ROOT` также должен оставаться вне публичного каталога веб-сервера. Регрессионные тесты проверяют доступ из другого аккаунта, отсутствие файла в хранилище, CSRF и сортировку приоритетов. Требуется Python 3.11+, используется Django 5.2 LTS.
+Нужны Python 3.11+ и Django 5.2 LTS. Интерфейс: http://127.0.0.1:8000. Зарегистрируйтесь через /register/. Для Compose скопируйте .env.example в .env и выполните docker compose up --build; драйвер PostgreSQL включён в зависимости. Обычный python manage.py runserver использует переменные окружения процесса, а не читает .env. CI проверяет SQLite и PostgreSQL, применение миграций, CRUD, сортировку приоритетов и доступ к вложениям. Файлы обслуживаются аутентифицированными представлениями; при развёртывании MEDIA_ROOT должен находиться вне публично обслуживаемой директории.

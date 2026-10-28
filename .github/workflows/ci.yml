@@ -10,6 +10,23 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        database: [sqlite, postgresql]
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: taskboard
+          POSTGRES_USER: taskboard
+          POSTGRES_PASSWORD: taskboard
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U taskboard"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -23,6 +40,13 @@ jobs:
           ruff check .
           black --check .
       - name: Run checks
+        env:
+          DB_ENGINE: ${{ matrix.database == 'postgresql' && 'django.db.backends.postgresql' || 'django.db.backends.sqlite3' }}
+          DB_NAME: ${{ matrix.database == 'postgresql' && 'taskboard' || 'db.sqlite3' }}
+          DB_USER: taskboard
+          DB_PASSWORD: taskboard
+          DB_HOST: localhost
+          DB_PORT: '5432'
         run: |
           python manage.py migrate --noinput
           python manage.py makemigrations --check --dry-run

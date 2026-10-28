@@ -26,6 +26,8 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+For Docker Compose, copy `.env.example` to `.env` and run `docker compose up --build`. The PostgreSQL driver is included. Local Django commands read process environment variables; they do not load `.env` automatically. Register at `/register/` after starting the UI.
+
 ## Checks
 
 ```bash
@@ -34,4 +36,4 @@ python manage.py test
 
 ## Scope and implementation notes
 
-Local UI: `http://127.0.0.1:8000`. Tests cover task CRUD, cross-account attachment access, CSRF, safe deletion methods and priority ordering. Files are served through authenticated views, including in development. Keep `MEDIA_ROOT` outside any publicly served directory when deploying.
+Local UI: `http://127.0.0.1:8000`. CI tests both SQLite and PostgreSQL, including migrations. Tests cover task CRUD, cross-account attachment access, CSRF, safe deletion methods and priority ordering. Files are served through authenticated views, including in development. Keep `MEDIA_ROOT` outside any publicly served directory when deploying.

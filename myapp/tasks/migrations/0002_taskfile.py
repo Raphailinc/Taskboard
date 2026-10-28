@@ -6,7 +6,7 @@ from django.db import migrations
 def create_missing_taskfile(apps, schema_editor):
     # 0001 already defines TaskFile. Older databases may predate that definition,
     # so retain the upgrade step without creating the same table twice.
-    model = apps.get_model('tasks', 'TaskFile')
+    model = apps.get_model("tasks", "TaskFile")
     if model._meta.db_table not in schema_editor.connection.introspection.table_names():
         schema_editor.create_model(model)
 
@@ -14,7 +14,7 @@ def create_missing_taskfile(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tasks', '0001_initial'),
+        ("tasks", "0001_initial"),
     ]
 
     operations = [

@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
-from django.db import models
+from django.db import models, transaction
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 
 class Task(models.Model):
@@ -35,3 +37,10 @@ class TaskFile(models.Model):
 
     def __str__(self):
         return f"{self.task.title} - {self.file.name}"
+
+
+@receiver(post_delete, sender=TaskFile)
+def delete_attachment_after_commit(sender, instance, **kwargs):
+    # A rolled-back task/file deletion must not destroy the stored attachment.
+    if instance.file:
+        transaction.on_commit(lambda: instance.file.delete(save=False))
